@@ -1,0 +1,29 @@
+project:
+  type: book
+
+book:
+  title: "Σύγχρονη C++ για Ερευνητές"
+  # author: "Ένας συμφοιτητής σας"
+  # date: "10/13/2026"
+  cover-image: images/cpp-cover.png
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - softwares.qmd
+    - program-creation.qmd
+
+lang: el
+
+filters:
+  - playground
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+  pdf:
+    documentclass: scrreprt
+    mainfont: "Noto Serif"
+    sansfont: "Noto Sans"
+    monofont: "Noto Sans Mono"
