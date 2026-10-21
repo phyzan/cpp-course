@@ -2,15 +2,15 @@ project:
   type: book
 
 book:
-  title: "Σύγχρονη C++ για Ερευνητές"
+  title: "C++ speedrun"
   # author: "Ένας συμφοιτητής σας"
   # date: "10/13/2026"
   cover-image: images/cpp-cover.png
   chapters:
     - index.qmd
-    - intro.qmd
     - softwares.qmd
     - program-creation.qmd
+    - chapter1/c_intro.qmd
 
 lang: el
 
