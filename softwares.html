@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="el" xml:lang="el"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Εγκατάσταση Εργαλείων – C++ speedrun</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./program-creation.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-5b233c69db2014fbd59a22ccf4bbc642.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Δεν βρέθηκαν αποτελέσματα",
+    "search-matching-documents-text": "ταιριάζοντα έγγραφα",
+    "search-copy-link-title": "Αντιγραφή συνδέσμου αναζήτησης",
+    "search-hide-matches-text": "Απόκρυψη επιπλέον αντιστοιχιών",
+    "search-more-match-text": "επιπλέον αντιστοιχία σε αυτό το έγγραφο",
+    "search-more-matches-text": "επιπλέον αντιστοιχίες σε αυτό το έγγραφο",
+    "search-clear-button-title": "Καθαρισμός",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Ακύρωση",
+    "search-submit-button-title": "Υποβολή",
+    "search-label": "Αναζήτηση"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Εναλλαγή πλαϊνής γραμμής πλοήγησης" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./softwares.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Εγκατάσταση Εργαλείων</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Εναλλαγή πλαϊνής γραμμής πλοήγησης" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Αναζήτηση" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">C++ speedrun</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Αναζήτηση"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Πρόλογος</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./softwares.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Εγκατάσταση Εργαλείων</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./program-creation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Κατασκευή προγράμματος</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter1/c_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Εισαγωγή στην C</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Πίνακας περιεχομένων</h2>
+   
+  <ul>
+  <li><a href="#linux" id="toc-linux" class="nav-link active" data-scroll-target="#linux"><span class="header-section-number">1.1</span> Linux</a>
+  <ul class="collapse">
+  <li><a href="#ubuntu-debian-linux-mint" id="toc-ubuntu-debian-linux-mint" class="nav-link" data-scroll-target="#ubuntu-debian-linux-mint"><span class="header-section-number">1.1.1</span> Ubuntu, Debian, Linux Mint</a></li>
+  <li><a href="#fedora" id="toc-fedora" class="nav-link" data-scroll-target="#fedora"><span class="header-section-number">1.1.2</span> Fedora</a></li>
+  <li><a href="#arch-linux-manjaro" id="toc-arch-linux-manjaro" class="nav-link" data-scroll-target="#arch-linux-manjaro"><span class="header-section-number">1.1.3</span> Arch Linux, Manjaro</a></li>
+  </ul></li>
+  <li><a href="#macos" id="toc-macos" class="nav-link" data-scroll-target="#macos"><span class="header-section-number">1.2</span> macOS</a>
+  <ul class="collapse">
+  <li><a href="#βήμα-1-command-line-tools-της-apple" id="toc-βήμα-1-command-line-tools-της-apple" class="nav-link" data-scroll-target="#βήμα-1-command-line-tools-της-apple"><span class="header-section-number">1.2.1</span> Βήμα 1: Command Line Tools της Apple</a></li>
+  <li><a href="#βήμα-2-homebrew" id="toc-βήμα-2-homebrew" class="nav-link" data-scroll-target="#βήμα-2-homebrew"><span class="header-section-number">1.2.2</span> Βήμα 2: Homebrew</a></li>
+  <li><a href="#βήμα-3-gcc-και-cmake" id="toc-βήμα-3-gcc-και-cmake" class="nav-link" data-scroll-target="#βήμα-3-gcc-και-cmake"><span class="header-section-number">1.2.3</span> Βήμα 3: GCC και CMake</a></li>
+  </ul></li>
+  <li><a href="#windows" id="toc-windows" class="nav-link" data-scroll-target="#windows"><span class="header-section-number">1.3</span> Windows</a>
+  <ul class="collapse">
+  <li><a href="#βήμα-1-εγκατάσταση-του-msys2" id="toc-βήμα-1-εγκατάσταση-του-msys2" class="nav-link" data-scroll-target="#βήμα-1-εγκατάσταση-του-msys2"><span class="header-section-number">1.3.1</span> Βήμα 1: Εγκατάσταση του MSYS2</a></li>
+  <li><a href="#βήμα-2-ενημέρωση-του-msys2" id="toc-βήμα-2-ενημέρωση-του-msys2" class="nav-link" data-scroll-target="#βήμα-2-ενημέρωση-του-msys2"><span class="header-section-number">1.3.2</span> Βήμα 2: Ενημέρωση του MSYS2</a></li>
+  <li><a href="#βήμα-3-εγκατάσταση-των-εργαλείων" id="toc-βήμα-3-εγκατάσταση-των-εργαλείων" class="nav-link" data-scroll-target="#βήμα-3-εγκατάσταση-των-εργαλείων"><span class="header-section-number">1.3.3</span> Βήμα 3: Εγκατάσταση των εργαλείων</a></li>
+  <li><a href="#βήμα-4-προσθήκη-στο-path" id="toc-βήμα-4-προσθήκη-στο-path" class="nav-link" data-scroll-target="#βήμα-4-προσθήκη-στο-path"><span class="header-section-number">1.3.4</span> Βήμα 4: Προσθήκη στο <code>PATH</code></a></li>
+  </ul></li>
+  <li><a href="#sec-install-check" id="toc-sec-install-check" class="nav-link" data-scroll-target="#sec-install-check"><span class="header-section-number">1.4</span> Έλεγχος της εγκατάστασης</a></li>
+  <li><a href="#εγκατάσταση-ide" id="toc-εγκατάσταση-ide" class="nav-link" data-scroll-target="#εγκατάσταση-ide"><span class="header-section-number">1.5</span> Εγκατάσταση IDE</a></li>
+  <li><a href="#εγκατάσταση-vscode" id="toc-εγκατάσταση-vscode" class="nav-link" data-scroll-target="#εγκατάσταση-vscode"><span class="header-section-number">1.6</span> Εγκατάσταση VSCode</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Εγκατάσταση Εργαλείων</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Θα χρειαστούμε 3 βασικά εργαλεία για τη μεταγλώττιση της <span style="white-space: nowrap">C++</span> σε γλώσσα μηχανής: τους μεταγλωττιστές (compilers) <code>g++</code> και <code>clang++</code>, καθώς και το <code>cmake</code>, ένα εργαλείο που οργανώνει τη μεταγλώττιση μεγαλύτερων προγραμμάτων που αποτελούνται από πολλά αρχεία. Στα επόμενα κεφάλαια θα χρησιμοποιούμε κυρίως τους δύο compilers, ενώ το <code>cmake</code> θα μας χρειαστεί όταν τα προγράμματά μας μεγαλώσουν.</p>
+<p>Όλα τα εργαλεία εγκαθίστανται από το τερματικό (terminal) με λίγες εντολές. Ακολουθήστε την ενότητα που αντιστοιχεί στο λειτουργικό σας σύστημα και στο τέλος κάντε τον <a href="#sec-install-check">έλεγχο της εγκατάστασης</a>.</p>
+<section id="linux" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="linux"><span class="header-section-number">1.1</span> Linux</h2>
+<p>Στο Linux αρκεί ο διαχειριστής πακέτων (package manager) της διανομής σας. Ανοίξτε ένα τερματικό και εκτελέστε τις εντολές που αντιστοιχούν στη διανομή σας:</p>
+<section id="ubuntu-debian-linux-mint" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="ubuntu-debian-linux-mint"><span class="header-section-number">1.1.1</span> Ubuntu, Debian, Linux Mint</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install build-essential clang cmake</span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Το πακέτο <code>build-essential</code> περιέχει τον <code>gcc</code> (για την C), τον <code>g++</code> και τα βασικά εργαλεία μεταγλώττισης, και το <code>clang</code> περιέχει τον <code>clang++</code>.</p>
+</section>
+<section id="fedora" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="fedora"><span class="header-section-number">1.1.2</span> Fedora</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install gcc-c++ clang cmake</span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="arch-linux-manjaro" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="arch-linux-manjaro"><span class="header-section-number">1.1.3</span> Arch Linux, Manjaro</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> <span class="at">--needed</span> gcc clang cmake</span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="macos" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="macos"><span class="header-section-number">1.2</span> macOS</h2>
+<p>Στο macOS χρειάζεται επίσης μόνο το terminal:</p>
+<section id="βήμα-1-command-line-tools-της-apple" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="βήμα-1-command-line-tools-της-apple"><span class="header-section-number">1.2.1</span> Βήμα 1: Command Line Tools της Apple</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xcode-select</span> <span class="at">--install</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Θα εμφανιστεί ένα παράθυρο που ζητά επιβεβαίωση· πατήστε <strong>Install</strong>. Με αυτόν τον τρόπο εγκαθίσταται ο <code>clang++</code> της Apple, χωρίς να χρειαστεί ολόκληρο το Xcode.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Προειδοποίηση</span>Ο <code>g++</code> του macOS είναι στην πραγματικότητα <code>clang++</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Μετά το βήμα 1 υπάρχει εντολή <code>g++</code>, αλλά είναι απλώς ψευδώνυμο για τον <code>clang++</code> της Apple. Η εντολή <code>g++ --version</code> το αποκαλύπτει, αφού τυπώνει <code>Apple clang</code>. Για τον πραγματικό <code>g++</code> (GCC) χρειάζονται τα βήματα 2 και 3.</p>
+</div>
+</div>
+</section>
+<section id="βήμα-2-homebrew" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="βήμα-2-homebrew"><span class="header-section-number">1.2.2</span> Βήμα 2: Homebrew</h3>
+<p>Το <a href="https://brew.sh">Homebrew</a> είναι ο πιο διαδεδομένος διαχειριστής πακέτων για το macOS. Εγκαθίσταται με την εντολή:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/bin/bash</span> <span class="at">-c</span> <span class="st">"</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="va">)</span><span class="st">"</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Στο τέλος της εγκατάστασης το Homebrew τυπώνει την ενότητα <strong>Next steps</strong> με δύο εντολές που προσθέτουν την <code>brew</code> στο <code>PATH</code>. Αντιγράψτε τες και εκτελέστε τες. Σε υπολογιστές με επεξεργαστή Apple Silicon (M1 και νεότερους) είναι:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'eval "$(/opt/homebrew/bin/brew shellenv)"'</span> <span class="op">&gt;&gt;</span> ~/.zprofile</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="st">"</span><span class="va">$(</span><span class="ex">/opt/homebrew/bin/brew</span> shellenv<span class="va">)</span><span class="st">"</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="βήμα-3-gcc-και-cmake" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="βήμα-3-gcc-και-cmake"><span class="header-section-number">1.2.3</span> Βήμα 3: GCC και CMake</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install gcc cmake</span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Το Homebrew εγκαθιστά τον <code>g++</code> με τον αριθμό της έκδοσης στο όνομα, ώστε να μη συγκρούεται με τον <code>g++</code> της Apple, π.χ. <code>g++-16</code>. Δείτε ποια έκδοση εγκαταστάθηκε με:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="va">$(</span><span class="ex">brew</span> <span class="at">--prefix</span><span class="va">)</span>/bin/g++-<span class="pp">*</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Στο macOS λοιπόν χρησιμοποιείτε <code>g++-16</code> (ή όποιος αριθμός εμφανιστεί) όπου οι σημειώσεις γράφουν <code>g++</code>, και <code>clang++</code> για τον clang.</p>
+</section>
+</section>
+<section id="windows" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="windows"><span class="header-section-number">1.3</span> Windows</h2>
+<p>Τα Windows δεν διαθέτουν δικό τους περιβάλλον για τους <code>g++</code> και <code>clang++</code>. Θα τους εγκαταστήσουμε μέσω του <strong>MSYS2</strong>, ενός περιβάλλοντος που φέρνει στα Windows τον διαχειριστή πακέτων <code>pacman</code> (τον ίδιο με το Arch Linux) και, μέσω αυτού, τα εργαλεία που χρειαζόμαστε.</p>
+<section id="βήμα-1-εγκατάσταση-του-msys2" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="βήμα-1-εγκατάσταση-του-msys2"><span class="header-section-number">1.3.1</span> Βήμα 1: Εγκατάσταση του MSYS2</h3>
+<p>Ανοίξτε το <strong>PowerShell</strong> (αναζήτηση «PowerShell» στο μενού Έναρξη) και εκτελέστε:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>winget install <span class="op">-</span>e <span class="op">--</span>id MSYS2<span class="op">.</span><span class="fu">MSYS2</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Το <code>winget</code> υπάρχει ήδη στα Windows 10 και 11. Το MSYS2 εγκαθίσταται στον φάκελο <code>C:\msys64</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Σημείωση
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Αν η εντολή <code>winget</code> δεν αναγνωρίζεται, ενημερώστε την εφαρμογή <strong>App Installer</strong> από το Microsoft Store ή κατεβάστε τον installer του MSYS2 από την <a href="https://www.msys2.org">επίσημη ιστοσελίδα</a>.</p>
+</div>
+</div>
+</section>
+<section id="βήμα-2-ενημέρωση-του-msys2" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="βήμα-2-ενημέρωση-του-msys2"><span class="header-section-number">1.3.2</span> Βήμα 2: Ενημέρωση του MSYS2</h3>
+<p>Από το μενού Έναρξη ανοίξτε το <strong>MSYS2 UCRT64</strong>. Προσοχή να επιλέξετε αυτό και όχι κάποιο από τα υπόλοιπα (MSYS2 MSYS, CLANG64 κ.λπ.). Στο τερματικό που ανοίγει εκτελέστε:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pacman</span> <span class="at">-Syu</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Πατήστε <code>Y</code> για επιβεβαίωση. Αν το τερματικό κλείσει μόνο του κατά την ενημέρωση, ανοίξτε ξανά το <strong>MSYS2 UCRT64</strong> και εκτελέστε ξανά <code>pacman -Syu</code>, μέχρι να μην υπάρχει τίποτα για ενημέρωση.</p>
+</section>
+<section id="βήμα-3-εγκατάσταση-των-εργαλείων" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="βήμα-3-εγκατάσταση-των-εργαλείων"><span class="header-section-number">1.3.3</span> Βήμα 3: Εγκατάσταση των εργαλείων</h3>
+<p>Στο ίδιο τερματικό (<strong>MSYS2 UCRT64</strong>):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pacman</span> <span class="at">-S</span> <span class="at">--needed</span> mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-clang mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-ninja</span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Πατήστε <code>Enter</code> για να επιλεγούν όλα τα πακέτα και <code>Y</code> για επιβεβαίωση. Το <code>ninja</code> είναι ένα γρήγορο εργαλείο build που χρησιμοποιεί το <code>cmake</code>.</p>
+</section>
+<section id="βήμα-4-προσθήκη-στο-path" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="βήμα-4-προσθήκη-στο-path"><span class="header-section-number">1.3.4</span> Βήμα 4: Προσθήκη στο <code>PATH</code></h3>
+<p>Για να λειτουργούν οι εντολές <code>g++</code>, <code>clang++</code> και <code>cmake</code> και εκτός του MSYS2, προσθέστε τον φάκελό τους στο <code>PATH</code> του χρήστη. Στο <strong>PowerShell</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span>Environment<span class="op">]::</span>SetEnvironmentVariable<span class="op">(</span><span class="st">"Path"</span><span class="op">,</span> <span class="op">[</span>Environment<span class="op">]::</span>GetEnvironmentVariable<span class="op">(</span><span class="st">"Path"</span><span class="op">,</span> <span class="st">"User"</span><span class="op">)</span> <span class="op">+</span> <span class="st">";C:\msys64\ucrt64\bin"</span><span class="op">,</span> <span class="st">"User"</span><span class="op">)</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="sec-install-check" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-install-check"><span class="header-section-number">1.4</span> Έλεγχος της εγκατάστασης</h2>
+<p>Σε ένα <strong>νέο</strong> τερματικό (στα Windows, το PowerShell) εκτελέστε:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">g++</span> <span class="at">--version</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">clang</span>++ <span class="at">--version</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--version</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Κάθε εντολή πρέπει να τυπώνει τον αριθμό της έκδοσης του αντίστοιχου εργαλείου (στο macOS, γράψτε <code>g++-16</code> αντί για <code>g++</code>).</p>
+<p>Τέλος, δοκιμάστε να μεταγλωττίσετε ένα πρόγραμμα. Αποθηκεύστε τον παρακάτω κώδικα σε ένα αρχείο <code>main.cpp</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"All good!</span><span class="sc">\n</span><span class="st">"</span><span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>και, στον φάκελο όπου βρίσκεται το αρχείο, εκτελέστε:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">g++</span> <span class="at">-std</span><span class="op">=</span>c++20 <span class="at">-o</span> main main.cpp</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div><button title="Αντιγραφή στο πρόχειρο" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Αν εμφανιστεί το μήνυμα <code>All good!</code>, η εγκατάσταση ολοκληρώθηκε. Επαναλάβετε με <code>clang++</code> στη θέση του <code>g++</code> για να ελέγξετε και τον δεύτερο compiler.</p>
+</section>
+<section id="εγκατάσταση-ide" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="εγκατάσταση-ide"><span class="header-section-number">1.5</span> Εγκατάσταση IDE</h2>
+<p>Πριν η συγγραφή κώδικα αρχίσει να γίνεται χρησιμοποιώντας προγραμματιστικό περιβάλλον, γινόταν σε απλούς editors. Καθώς οι ανάγκες για πολύ μεγάλους κώδικες αυξάνονται, με πολλούς προγραμματιστές να δουεύουν πάνω στο ίδιο λογισμικό, η συγγραφή κώδικα γίνεται ασφαλέστερη και ευκολότερη όταν ο editor στον οποίο πληκτρολογούμε αναγνωρίζει την σύνταξη της γλώσσας και μας υποδεικνύει λάθη ή εντολές.</p>
+<p>Ένα IDE με το οποίο οι περισσότεροι προγραμματιστές είναι εξοικειωμένοι είναι το Visual Studio Code.</p>
+</section>
+<section id="εγκατάσταση-vscode" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="εγκατάσταση-vscode"><span class="header-section-number">1.6</span> Εγκατάσταση VSCode</h2>
+<p>Κατεβάστε και εγκαταστήστε το Visual Studio Code από την <a href="https://code.visualstudio.com/download?_exp_download=d53503e735">επίσημη ιστοσελίδα</a> του. Μετά την εγκατάσταση, ανοίξτε τα extensions για να κατεβάσετε τον language server <code>clangd</code>:</p>
+<div id="fig-clangd" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Αναζήτηση clangd στο Extensions Marketplace του VS Code, με την επέκταση clangd της LLVM επιλεγμένη.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-clangd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/clangd.png" class="img-fluid figure-img" style="width:80.0%" alt="Αναζήτηση clangd στο Extensions Marketplace του VS Code, με την επέκταση clangd της LLVM επιλεγμένη.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clangd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Σχήμα&nbsp;1.1: Η επέκταση <code>clangd</code> (από την LLVM) στο Extensions Marketplace του VS Code.
+</figcaption>
+</figure>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Αντιγράφηκε!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Αντιγράφηκε!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Πρόλογος">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Πρόλογος</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./program-creation.html" class="pagination-link" aria-label="Κατασκευή προγράμματος">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Κατασκευή προγράμματος</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
